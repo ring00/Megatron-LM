@@ -8,7 +8,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__),
 from megatron.training import print_rank_0
 from megatron.core.models.gpt import GPTModel
 from megatron.training.arguments import core_transformer_config_from_args
-from megatron.training.yaml_arguments import core_transformer_config_from_yaml
 from megatron.inference.text_generation_server import MegatronServer
 from megatron.core.transformer.spec_utils import import_module
 from megatron.core.models.gpt.gpt_layer_specs import (
@@ -59,11 +58,7 @@ def model_provider(pre_process=True, post_process=True) -> Union[GPTModel, megat
 
     print_rank_0('building GPT model ...')
 
-    # Experimental loading arguments from yaml
-    if args.yaml_cfg is not None:
-        config = core_transformer_config_from_yaml(args, "language_model")
-    else:
-        config = core_transformer_config_from_args(args)
+    config = core_transformer_config_from_args(args)
 
     if args.use_legacy_models:
         model = megatron.legacy.model.GPTModel(

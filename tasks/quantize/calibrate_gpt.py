@@ -23,7 +23,6 @@ from megatron.training.checkpointing import load_checkpoint
 from megatron.training.initialize import initialize_megatron
 from megatron.training.training import save_checkpoint_and_time
 from megatron.training.utils import unwrap_model
-from megatron.training.yaml_arguments import core_transformer_config_from_yaml
 from tasks.finetune_utils import build_data_loader
 from tasks.zeroshot_gpt.datasets import build_dataset
 from tasks.zeroshot_gpt.evaluate import process_batch
@@ -44,11 +43,7 @@ def model_provider(pre_process=True, post_process=True) -> GPTModel:
 
     print_rank_0('building GPT model ...')
 
-    # Experimental loading arguments from yaml
-    if args.yaml_cfg is not None:
-        config = core_transformer_config_from_yaml(args, "language_model")
-    else:
-        config = core_transformer_config_from_args(args)
+    config = core_transformer_config_from_args(args)
 
     if args.use_legacy_models or args.transformer_impl != "transformer_engine":
         raise NotImplementedError(

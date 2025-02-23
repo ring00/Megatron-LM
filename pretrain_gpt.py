@@ -29,7 +29,6 @@ from megatron.training.utils import (
     get_blend_and_blend_per_split,
 )
 from megatron.training.arguments import core_transformer_config_from_args
-from megatron.training.yaml_arguments import core_transformer_config_from_yaml
 from megatron.core.models.gpt.gpt_layer_specs import (
     get_gpt_decoder_block_spec,
     get_gpt_layer_local_spec,
@@ -64,11 +63,7 @@ def model_provider(pre_process=True, post_process=True) -> Union[GPTModel, megat
             trace_alloc_record_context=True)
 
     print_rank_0('building GPT model ...')
-    # Experimental loading arguments from yaml
-    if args.yaml_cfg is not None:
-        config = core_transformer_config_from_yaml(args, "language_model")
-    else:
-        config = core_transformer_config_from_args(args)
+    config = core_transformer_config_from_args(args)
 
     if args.use_legacy_models:
         model = megatron.legacy.model.GPTModel(

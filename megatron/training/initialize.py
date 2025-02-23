@@ -29,7 +29,6 @@ from megatron.training.arguments import parse_args, validate_args
 from megatron.training.async_utils import init_persistent_async_worker
 from megatron.training.checkpointing import load_args_from_checkpoint
 from megatron.training.global_vars import set_global_variables
-from megatron.training.yaml_arguments import validate_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -76,10 +75,7 @@ def initialize_megatron(
     if args.async_save and args.use_persistent_ckpt_worker:
         init_persistent_async_worker()
 
-    if args.yaml_cfg is not None:
-        args = validate_yaml(args, args_defaults)
-    else:
-        validate_args(args, args_defaults)
+    validate_args(args, args_defaults)
 
     # set global args, build tokenizer, and set adlr-autoresume,
     # tensorboard-writer, and timers.

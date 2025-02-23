@@ -77,7 +77,7 @@ def parse_args(extra_args_provider=None, ignore_unknown_args=False):
         from .yaml_arguments import load_yaml
         assert args.yaml_cfg and not args.use_legacy_models, \
             "Yaml config is not supported with legacy models."
-        args = load_yaml(args.yaml_cfg)
+        args = load_yaml(args.yaml_cfg, args, ignore_unknown_args)
 
 
     # Args from environment

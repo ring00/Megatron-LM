@@ -149,7 +149,7 @@ PP=1 \
 TARGET_NUM_LAYERS=24 \
 HF_MODEL_CKPT=<pretrained_model_name_or_path> \
 MLM_MODEL_SAVE=Qwen3-8B-Pruned \
-./prune.sh Qwen/Qwen3-8B
+./prune.sh qwen/Qwen3-8B
 ```
 
 > [!TIP]

@@ -4,9 +4,10 @@
 
 import json
 import os
-
+import re
 from types import SimpleNamespace
-import yaml, re, os
+
+import yaml
 
 # Taken from https://stackoverflow.com/questions/65414773/parse-environment-variable-from-yaml-with-pyyaml
 # Allows for yaml to use environment variables
@@ -21,8 +22,8 @@ def env_constructor(loader, node):
     return value
 
 
-yaml.add_implicit_resolver("!pathex", env_pattern)
-yaml.add_constructor("!pathex", env_constructor)
+yaml.add_implicit_resolver("!pathex", env_pattern, Loader=yaml.SafeLoader)
+yaml.add_constructor("!pathex", env_constructor, Loader=yaml.SafeLoader)
 
 
 def merge_yaml_and_cli_args(yaml_args, cli_args, ignore_unknown_args=False):
@@ -63,8 +64,10 @@ def load_yaml(yaml_path, cli_args, ignore_unknown_args=False):
     print(
         "WARNING: Using experimental YAML argument feature, command line arguments will be overwritten."
     )
-    with open(yaml_path, "r") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        config = yaml.load(f, Loader=yaml.SafeLoader)
         # Convert to nested namespace
-        yaml_args = json.loads(json.dumps(config), object_hook=lambda item: SimpleNamespace(**item))
+        yaml_args = json.loads(
+            json.dumps(config), object_hook=lambda item: SimpleNamespace(**item)
+        )
         return merge_yaml_and_cli_args(yaml_args, cli_args, ignore_unknown_args)
